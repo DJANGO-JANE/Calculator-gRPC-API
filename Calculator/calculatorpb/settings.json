@@ -1,0 +1,11 @@
+{
+    "protoc": {
+        "path": "/path/to/protoc",
+        "compile_on_save": true,
+        "options": [
+            "--proto_path=${workspaceRoot}/../",
+            "--proto_path=${env.GOPATH}/src",
+            "--go_out=plugins=grpc:."
+        ]
+    }
+}
