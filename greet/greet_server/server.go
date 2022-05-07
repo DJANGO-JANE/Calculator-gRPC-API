@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strconv"
+	"time"
 
+	"github.com/DJANGO-JANE/GogRPC/greet/greetpb"
 	__ "github.com/DJANGO-JANE/GogRPC/greet/greetpb"
 	"google.golang.org/grpc"
 )
@@ -24,10 +27,20 @@ func (*server) Greet(ctx context.Context, req *__.GreetRequest) (*__.GreetRespon
 
 }
 
-// func NewServer() __.UnsafeGreetServiceServer {
-// 	return &__.UnimplementedGreetServiceServer{}
-// }
+func (*server) GreetManyTimes(request *greetpb.GreetManyTimesRequest, stream greetpb.GreetService_GreetManyTimesServer) error {
+	firstname := request.GetGreeting().FirstName
 
+	for i := 0; i < 10; i++ {
+		result := "Hello " + firstname + " number " + strconv.Itoa(i)
+		res := &greetpb.GreetManyTimesResponse{
+			Result: result,
+		}
+		stream.Send(res)
+		time.Sleep(1000 * time.Millisecond)
+	}
+	return nil
+
+}
 func main() {
 
 	fmt.Println("Hello from the server")
