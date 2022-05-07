@@ -23,11 +23,33 @@ message CalculateManyTimesRequest{
 message CalculateManyTimesResponse{
     int32 result = 1;
 }
+
+message AverageRequest{
+    int32 number = 1;
+}
+
+message AverageResponse{
+    double result = 1;
+}
+message MaxNumberRequest{
+    int32 number = 1;
+}
+message MaxNumberResponse{
+    int32 number = 1;
+}
+
+
 service CalculatorService{
     //Unary
     rpc Calculate(CalculateRequest) returns (CalculateResponse){};
 
     //Stream
     rpc CalculateStream(CalculateManyTimesRequest) returns (stream CalculateManyTimesResponse){};
-    
+
+    //Client Streaming
+    rpc ComputeAverage(stream AverageRequest) returns (AverageResponse){};
+
+    //Bi-directional streaming (Bi-Di)
+    rpc FindMaximum(stream MaxNumberRequest) returns (stream MaxNumberResponse){};
+
 }
