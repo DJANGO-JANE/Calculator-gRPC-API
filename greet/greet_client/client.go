@@ -60,7 +60,7 @@ func doStreaming(client greetpb.GreetServiceClient) {
 		if err == io.EOF {
 			break
 		}
-		if err == io.EOF {
+		if err != nil {
 			log.Fatalf("Error while reading stream from server.: %v", err)
 		}
 		log.Printf("Stream : %v", msg.GetResult())

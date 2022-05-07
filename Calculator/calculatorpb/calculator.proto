@@ -15,7 +15,19 @@ message CalculateRequest {
 message CalculateResponse {
     int32 result = 1;
 }
+
+message CalculateManyTimesRequest{
+    Calculate calculate = 1;
+}
+
+message CalculateManyTimesResponse{
+    int32 result = 1;
+}
 service CalculatorService{
     //Unary
     rpc Calculate(CalculateRequest) returns (CalculateResponse){};
+
+    //Stream
+    rpc CalculateStream(CalculateManyTimesRequest) returns (stream CalculateManyTimesResponse){};
+    
 }

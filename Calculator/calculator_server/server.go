@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net"
+	"time"
 
 	"github.com/DJANGO-JANE/GogRPC/Calculator/calculatorpb"
 	"google.golang.org/grpc"
@@ -23,6 +24,28 @@ func (*server) Calculate(ctx context.Context, req *calculatorpb.CalculateRequest
 	}
 	return res, nil
 }
+
+func (*server) CalculateStream(request *calculatorpb.CalculateManyTimesRequest, stream calculatorpb.CalculatorService_CalculateStreamServer) error {
+	num1 := request.GetCalculate().FirstNum
+	var divisor int32
+	divisor = 2
+	for num1 > 1 {
+		if num1%divisor == 0 {
+			num1 = num1 / divisor
+		} else {
+			divisor = divisor + 1
+		}
+		response := &calculatorpb.CalculateManyTimesResponse{
+			Result: divisor,
+		}
+		stream.Send(response)
+		time.Sleep(1000 * time.Millisecond)
+	}
+
+	return nil
+
+}
+
 func main() {
 
 	listener, err := net.Listen("tcp", "0.0.0.0:50051")
